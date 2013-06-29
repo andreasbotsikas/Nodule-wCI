@@ -49,10 +49,12 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\DependencyWalker.cs" />
     <Compile Include="Helpers\NpmInstaller.cs" />
     <Compile Include="Helpers\PathHelpers.cs" />
     <Compile Include="IProcessor.cs" />
