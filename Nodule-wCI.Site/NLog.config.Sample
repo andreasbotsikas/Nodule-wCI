@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Sample Nlog config to send mails via gmail -->
+<nlog throwExceptions="true" xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" autoReload="true">
+  <targets async="true">
+    <target xsi:type="Mail" name="MailErrors" addNewLines="true" subject="[Nodule-wCI] Log ${level}"
+            layout="${longdate}${newline}Level: ${level:uppercase=true}${newline}By: ${logger}${newline}Message: ${message}${exception:format=tostring:innerFormat=Message:maxInnerExceptionLevel=5}${newline}Stack trace:${stacktrace}"
+            to="yourmail@domain.com" from="username@gmail.com" smtpUserName="username@gmail.com" enableSsl="true"
+            smtpPassword="password" smtpAuthentication="Basic" smtpServer="smtp.gmail.com" smtpPort="587" />
+  </targets>
+  <rules>
+    <logger name="*" writeTo="MailErrors" />
+  </rules>
+</nlog>

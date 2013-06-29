@@ -1,0 +1,19 @@
+﻿@model System.Data.Entity.DbSet<Nodule_wCI.DB.WebHookPosts>
+@{
+    ViewBag.Title = "List of requests";
+}
+<html>
+    <head>
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        <h2>List of requests</h2>
+        <ul>
+        @foreach (var r in Model)
+        {
+            <li>@r.GetPullRequestNpmUrl() | @r.PostStatuses.Description @if(r.StatusId>(int)Nodule_wCI.DB.PostStatuses.AvailableStatuses.Processing){<a href="@Url.Action("BuildLog", new { prId = r.Id })"> | Build log</a>}</li>    
+        }  
+        </ul>      
+    </body>
+</html>
+

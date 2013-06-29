@@ -1,0 +1,22 @@
+﻿@model Nodule_wCI.DB.WebHookPosts
+@{
+    ViewBag.Title = "Build Log";
+}
+<html>
+    <head>
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        <h2>Build log</h2>
+        @if (Model == null)
+        {
+            <b>Nothing to see here</b>
+        }
+        else
+        {
+            <b>@Model.GetPullRequestNpmUrl() | @Model.PostStatuses.Description</b>
+            <pre>@Model.Result</pre>
+        }
+    </body>
+</html>
+
