@@ -68,25 +68,37 @@ namespace Nodule_wCI.Worker
                         return false;
                     }
                     // Mark as processing
-                    request.StatusId = (byte)DB.PostStatuses.AvailableStatuses.Processing;
+                    request.StatusId = (byte)PostStatuses.AvailableStatuses.Processing;
                     db.SaveChanges();
+                    // Create temp path
+                    var workingDir = PathHelpers.GetTempFolder();
                     try
                     {
                         var npm = new NpmInstaller();
-                        var output = npm.ProcessEntrySync(request.GetPullRequestNpmUrl());
-                        PostStatuses.AvailableStatuses newStatus = output ? PostStatuses.AvailableStatuses.Success : PostStatuses.AvailableStatuses.Failed;
+                        var output = npm.ProcessEntrySync(workingDir,request.GetPullRequestNpmUrl());
+                        PostStatuses.AvailableStatuses newStatus = output
+                                                                       ? PostStatuses.AvailableStatuses.Success
+                                                                       : PostStatuses.AvailableStatuses.Failed;
                         request.StatusId = (byte) newStatus;
                         request.Result = npm.Output;
                     }
                     catch (Exception npmException)
                     {
 
-                        Log.ErrorException(string.Format("Failed to do npm install on request with id {0}", requestId), npmException);
+                        Log.ErrorException(string.Format("Failed to do npm install on request with id {0}", requestId),
+                                           npmException);
                         // Reset status to process it later
                         request.StatusId = (int) PostStatuses.AvailableStatuses.JustRecieved;
                         db.SaveChanges();
                         return false;
                     }
+                    if (request.StatusId == (int) PostStatuses.AvailableStatuses.Success)
+                    {
+                        // If it was build ok do a dependency walk
+                        // TODO: Hookup dependency walk
+                    }
+                    // Delete temp path
+                    PathHelpers.DeleteRecursively(workingDir);
                     db.SaveChanges();
                     return true;
                 }
