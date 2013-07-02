@@ -18,6 +18,12 @@
   <wsdl:message name="IProcessor_ProcessNewRequests_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProcessNewRequestsResponse" />
   </wsdl:message>
+  <wsdl:message name="IProcessor_StartProcessRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartProcessRequest" />
+  </wsdl:message>
+  <wsdl:message name="IProcessor_StartProcessNewRequests_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartProcessNewRequests" />
+  </wsdl:message>
   <wsdl:portType name="IProcessor">
     <wsdl:operation name="ProcessRequest">
       <wsdl:input wsaw:Action="http://tempuri.org/IProcessor/ProcessRequest" message="tns:IProcessor_ProcessRequest_InputMessage" />
@@ -26,6 +32,12 @@
     <wsdl:operation name="ProcessNewRequests">
       <wsdl:input wsaw:Action="http://tempuri.org/IProcessor/ProcessNewRequests" message="tns:IProcessor_ProcessNewRequests_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProcessor/ProcessNewRequestsResponse" message="tns:IProcessor_ProcessNewRequests_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartProcessRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProcessor/StartProcessRequest" message="tns:IProcessor_StartProcessRequest_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartProcessNewRequests">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProcessor/StartProcessNewRequests" message="tns:IProcessor_StartProcessNewRequests_InputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ProcessorBasicHttpEndpoint" type="tns:IProcessor">
@@ -47,6 +59,18 @@
       <wsdl:output>
         <soap:body use="literal" />
       </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StartProcessRequest">
+      <soap:operation soapAction="http://tempuri.org/IProcessor/StartProcessRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="StartProcessNewRequests">
+      <soap:operation soapAction="http://tempuri.org/IProcessor/StartProcessNewRequests" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="Processor">

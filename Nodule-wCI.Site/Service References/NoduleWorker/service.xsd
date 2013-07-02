@@ -26,4 +26,16 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="StartProcessRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="requestId" type="xs:long" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartProcessNewRequests">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

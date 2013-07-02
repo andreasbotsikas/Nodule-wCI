@@ -26,6 +26,18 @@ namespace Nodule_wCI.Site.NoduleWorker {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProcessor/ProcessNewRequests", ReplyAction="http://tempuri.org/IProcessor/ProcessNewRequestsResponse")]
         System.Threading.Tasks.Task<bool> ProcessNewRequestsAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IProcessor/StartProcessRequest")]
+        void StartProcessRequest(long requestId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IProcessor/StartProcessRequest")]
+        System.Threading.Tasks.Task StartProcessRequestAsync(long requestId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IProcessor/StartProcessNewRequests")]
+        void StartProcessNewRequests();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IProcessor/StartProcessNewRequests")]
+        System.Threading.Tasks.Task StartProcessNewRequestsAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -69,6 +81,22 @@ namespace Nodule_wCI.Site.NoduleWorker {
         
         public System.Threading.Tasks.Task<bool> ProcessNewRequestsAsync() {
             return base.Channel.ProcessNewRequestsAsync();
+        }
+        
+        public void StartProcessRequest(long requestId) {
+            base.Channel.StartProcessRequest(requestId);
+        }
+        
+        public System.Threading.Tasks.Task StartProcessRequestAsync(long requestId) {
+            return base.Channel.StartProcessRequestAsync(requestId);
+        }
+        
+        public void StartProcessNewRequests() {
+            base.Channel.StartProcessNewRequests();
+        }
+        
+        public System.Threading.Tasks.Task StartProcessNewRequestsAsync() {
+            return base.Channel.StartProcessNewRequestsAsync();
         }
     }
 }

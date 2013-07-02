@@ -44,7 +44,7 @@ namespace Nodule_wCI.Site.Controllers
                     {
                         // Fire the request and forget about it
                         var c = new NoduleWorker.ProcessorClient();
-                        c.ProcessNewRequestsAsync();
+                        c.StartProcessRequest(postId);
                     }
                     catch (Exception initiateProcessingException)
                     {

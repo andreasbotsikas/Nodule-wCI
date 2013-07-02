@@ -136,12 +136,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
-    <Content Include="Service References\NoduleWorker\configuration91.svcinfo" />
-    <Content Include="Service References\NoduleWorker\configuration.svcinfo" />
-    <Content Include="Service References\NoduleWorker\Reference.svcmap">
+    <None Include="Service References\NoduleWorker\configuration91.svcinfo" />
+    <None Include="Service References\NoduleWorker\configuration.svcinfo" />
+    <None Include="Service References\NoduleWorker\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </Content>
+    </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -173,7 +173,7 @@
     <WCFMetadataStorage Include="Service References\NoduleWorker\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Service References\NoduleWorker\service.wsdl" />
+    <None Include="Service References\NoduleWorker\service.wsdl" />
     <Content Include="NLog.config.Sample" />
     <None Include="Properties\PublishProfiles\LocalFS.pubxml" />
     <None Include="Service References\NoduleWorker\service.xsd">

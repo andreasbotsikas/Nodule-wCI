@@ -98,6 +98,7 @@ namespace Nodule_wCI.Worker
             }
         }
 
+        #region Async wcf calls
         public IAsyncResult BeginProcessRequest(long requestId, AsyncCallback callback, object state)
         {
             var result = Task<bool>.Factory.StartNew((taskState) => ProcessRequest(requestId), state);
@@ -129,5 +130,18 @@ namespace Nodule_wCI.Worker
         {
             return ((Task<bool>)r).Result;
         }
+        #endregion
+        #region Fire and forger implementation
+        public void StartProcessRequest(long requestId)
+        {
+            ProcessRequest(requestId);
+        }
+
+        public void StartProcessNewRequests()
+        {
+            ProcessNewRequests();
+        }
+        #endregion
+    
     }
 }
