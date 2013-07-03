@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="NoduleDbModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="NoduleDbModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="NoduleDbModelStoreContainer">
           <EntitySet Name="Commits" EntityType="NoduleDbModel.Store.Commits" store:Type="Tables" />
           <EntitySet Name="PostStatuses" EntityType="NoduleDbModel.Store.PostStatuses" store:Type="Tables" />
@@ -65,6 +65,7 @@
           <Property Name="RepoUrl" Type="nvarchar" MaxLength="500" />
           <Property Name="PullRequestReference" Type="nvarchar" MaxLength="500" />
           <Property Name="Result" Type="ntext" />
+          <Property Name="Organization" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <Association Name="FK_Commit">
           <End Role="Commits" Type="NoduleDbModel.Store.Commits" Multiplicity="1">
@@ -108,8 +109,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="NoduleDbModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -135,24 +135,24 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Email" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="Name" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
-          <Property Name="Username" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
-          <Property Name="ModifiedNo" Type="Int32" Nullable="false" />
-          <Property Name="AddedNo" Type="Int32" Nullable="false" />
-          <Property Name="DeletedNo" Type="Int32" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Url" Type="String" Nullable="false" MaxLength="1000" Unicode="true" FixedLength="false" />
-          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="Id" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Email" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Name" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Username" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ModifiedNo" Nullable="false" />
+          <Property Type="Int32" Name="AddedNo" Nullable="false" />
+          <Property Type="Int32" Name="DeletedNo" Nullable="false" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Url" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Message" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="WebHookPostCommits" Relationship="NoduleDbModel.FK_Commit" FromRole="Commits" ToRole="WebHookPostCommits" />
         </EntityType>
         <EntityType Name="PostStatuses">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Byte" Nullable="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Type="Byte" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="WebHookPosts" Relationship="NoduleDbModel.FK_PostStatuses" FromRole="PostStatuses" ToRole="WebHookPosts" />
         </EntityType>
         <EntityType Name="WebHookPostCommits">
@@ -160,9 +160,9 @@
             <PropertyRef Name="WebHookPostId" />
             <PropertyRef Name="CommitId" />
           </Key>
-          <Property Name="WebHookPostId" Type="Int64" Nullable="false" />
-          <Property Name="CommitId" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Order" Type="Int32" Nullable="false" />
+          <Property Type="Int64" Name="WebHookPostId" Nullable="false" />
+          <Property Type="String" Name="CommitId" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Order" Nullable="false" />
           <NavigationProperty Name="Commits" Relationship="NoduleDbModel.FK_Commit" FromRole="WebHookPostCommits" ToRole="Commits" />
           <NavigationProperty Name="WebHookPosts" Relationship="NoduleDbModel.FK_WebHookPosts" FromRole="WebHookPostCommits" ToRole="WebHookPosts" />
         </EntityType>
@@ -170,21 +170,22 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="PostData" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="StatusId" Type="Byte" Nullable="false" />
-          <Property Name="RepoUrl" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
-          <Property Name="PullRequestReference" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
-          <Property Name="Result" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="3" />
+          <Property Type="String" Name="PostData" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="StatusId" Nullable="false" />
+          <Property Type="String" Name="RepoUrl" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PullRequestReference" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Result" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PostStatuses" Relationship="NoduleDbModel.FK_PostStatuses" FromRole="WebHookPosts" ToRole="PostStatuses" />
           <NavigationProperty Name="WebHookPostCommits" Relationship="NoduleDbModel.FK_WebHookPosts" FromRole="WebHookPosts" ToRole="WebHookPostCommits" />
+          <Property Type="String" Name="Organization" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Commit">
-          <End Role="Commits" Type="NoduleDbModel.Commits" Multiplicity="1">
+          <End Type="NoduleDbModel.Commits" Role="Commits" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="WebHookPostCommits" Type="NoduleDbModel.WebHookPostCommits" Multiplicity="*" />
+          <End Type="NoduleDbModel.WebHookPostCommits" Role="WebHookPostCommits" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Commits">
               <PropertyRef Name="Id" />
@@ -195,10 +196,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PostStatuses">
-          <End Role="PostStatuses" Type="NoduleDbModel.PostStatuses" Multiplicity="1">
+          <End Type="NoduleDbModel.PostStatuses" Role="PostStatuses" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="WebHookPosts" Type="NoduleDbModel.WebHookPosts" Multiplicity="*" />
+          <End Type="NoduleDbModel.WebHookPosts" Role="WebHookPosts" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PostStatuses">
               <PropertyRef Name="Id" />
@@ -209,10 +210,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_WebHookPosts">
-          <End Role="WebHookPosts" Type="NoduleDbModel.WebHookPosts" Multiplicity="1">
+          <End Type="NoduleDbModel.WebHookPosts" Role="WebHookPosts" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="WebHookPostCommits" Type="NoduleDbModel.WebHookPostCommits" Multiplicity="*" />
+          <End Type="NoduleDbModel.WebHookPostCommits" Role="WebHookPostCommits" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WebHookPosts">
               <PropertyRef Name="Id" />
@@ -222,7 +223,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -231,46 +232,47 @@
           <EntitySetMapping Name="Commits">
             <EntityTypeMapping TypeName="NoduleDbModel.Commits">
               <MappingFragment StoreEntitySet="Commits">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="ModifiedNo" ColumnName="ModifiedNo" />
-                <ScalarProperty Name="AddedNo" ColumnName="AddedNo" />
-                <ScalarProperty Name="DeletedNo" ColumnName="DeletedNo" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="DeletedNo" ColumnName="DeletedNo" />
+                <ScalarProperty Name="AddedNo" ColumnName="AddedNo" />
+                <ScalarProperty Name="ModifiedNo" ColumnName="ModifiedNo" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PostStatuses">
             <EntityTypeMapping TypeName="NoduleDbModel.PostStatuses">
               <MappingFragment StoreEntitySet="PostStatuses">
-                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="WebHookPostCommits">
             <EntityTypeMapping TypeName="NoduleDbModel.WebHookPostCommits">
               <MappingFragment StoreEntitySet="WebHookPostCommits">
-                <ScalarProperty Name="WebHookPostId" ColumnName="WebHookPostId" />
-                <ScalarProperty Name="CommitId" ColumnName="CommitId" />
                 <ScalarProperty Name="Order" ColumnName="Order" />
+                <ScalarProperty Name="CommitId" ColumnName="CommitId" />
+                <ScalarProperty Name="WebHookPostId" ColumnName="WebHookPostId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="WebHookPosts">
             <EntityTypeMapping TypeName="NoduleDbModel.WebHookPosts">
               <MappingFragment StoreEntitySet="WebHookPosts">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="PostData" ColumnName="PostData" />
-                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
-                <ScalarProperty Name="RepoUrl" ColumnName="RepoUrl" />
-                <ScalarProperty Name="PullRequestReference" ColumnName="PullRequestReference" />
+                <ScalarProperty Name="Organization" ColumnName="Organization" />
                 <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="PullRequestReference" ColumnName="PullRequestReference" />
+                <ScalarProperty Name="RepoUrl" ColumnName="RepoUrl" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="PostData" ColumnName="PostData" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

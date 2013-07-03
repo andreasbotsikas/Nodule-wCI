@@ -11,7 +11,7 @@
         <ul>
         @foreach (var r in Model)
         {
-            <li>@r.GetPullRequestNpmUrl() | @r.PostStatuses.Description @if(r.StatusId>(int)Nodule_wCI.DB.PostStatuses.AvailableStatuses.Processing){<a href="@Url.Action("BuildLog", new { prId = r.Id })"> | Build log</a>}</li>    
+            <li>@r.GetPullRequestNpmUrl() | @r.Date | @r.PostStatuses.Description @if(r.StatusId>(int)Nodule_wCI.DB.PostStatuses.AvailableStatuses.Processing){<a href="@Url.Action("BuildLog", new { prId = r.Id })"> | Build log</a>}</li>    
         }  
         </ul>      
     </body>

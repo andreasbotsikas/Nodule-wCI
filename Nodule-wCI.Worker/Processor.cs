@@ -8,8 +8,9 @@ using System.ServiceModel.Activation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Nodule_wCI.DB;
+using Nodule_wCI.Enums;
 using Nodule_wCI.Worker.Helpers;
+using Nodule_wCI.Worker.NoduleDb;
 
 namespace Nodule_wCI.Worker
 {
@@ -21,9 +22,11 @@ namespace Nodule_wCI.Worker
 
         static Processor()
         {
-            // Update the location of the database file based on app setting
-            AppDomain.CurrentDomain.SetData("DataDirectory", ConfigurationManager.AppSettings["DataFileLocation"]);
+            // Create a uri to keep the db service address
+            DbServiceUri = new Uri(ConfigurationManager.AppSettings["DbServiceUri"]);
         }
+
+        private static Uri DbServiceUri { get; set; }
 
         // Logger helper
         private static readonly NLog.Logger Log = NLog.LogManager.GetCurrentClassLogger();
@@ -34,16 +37,14 @@ namespace Nodule_wCI.Worker
             try
             {
                 long[] newRequests;
-                using (var db = new NoduleDbEntities())
-                {
-                    const int unprocessedStatus = (int)DB.PostStatuses.AvailableStatuses.JustRecieved;
-                    newRequests =
-                        db.WebHookPosts.Where(i => i.StatusId == unprocessedStatus).Select(i => i.Id).ToArray();
-                }
+                var db = new NoduleDbEntities(DbServiceUri);
+
+                const int unprocessedStatus = (int)PostStatus.JustRecieved;
+                newRequests = db.WebHookPosts.Where(i => i.StatusId == unprocessedStatus).Select(i => i.Id).ToArray();
                 // Process all the new requests
                 foreach (var request in newRequests)
                 {
-                    output = ProcessRequest(request) && output; 
+                    output = ProcessRequest(request) && output;
                 }
                 // We don't stop processing the rest of the requests if one fails
                 return output;
@@ -59,49 +60,45 @@ namespace Nodule_wCI.Worker
         {
             try
             {
-                using (var db = new NoduleDbEntities())
+                var db = new NoduleDbEntities(DbServiceUri);
+                var request = db.WebHookPosts.SingleOrDefault(i => i.Id == requestId);
+                if (request == null)
                 {
-                    var request = db.WebHookPosts.SingleOrDefault(i => i.Id == requestId);
-                    if (request == null)
-                    {
-                        Log.Warn(string.Format("Could not locate request with id {0}", requestId));
-                        return false;
-                    }
-                    // Mark as processing
-                    request.StatusId = (byte)PostStatuses.AvailableStatuses.Processing;
-                    db.SaveChanges();
-                    // Create temp path
-                    var workingDir = PathHelpers.GetTempFolder();
-                    try
-                    {
-                        var npm = new NpmInstaller();
-                        var output = npm.ProcessEntrySync(workingDir,request.GetPullRequestNpmUrl());
-                        PostStatuses.AvailableStatuses newStatus = output
-                                                                       ? PostStatuses.AvailableStatuses.Success
-                                                                       : PostStatuses.AvailableStatuses.Failed;
-                        request.StatusId = (byte) newStatus;
-                        request.Result = npm.Output;
-                    }
-                    catch (Exception npmException)
-                    {
-
-                        Log.ErrorException(string.Format("Failed to do npm install on request with id {0}", requestId),
-                                           npmException);
-                        // Reset status to process it later
-                        request.StatusId = (int) PostStatuses.AvailableStatuses.JustRecieved;
-                        db.SaveChanges();
-                        return false;
-                    }
-                    if (request.StatusId == (int) PostStatuses.AvailableStatuses.Success)
-                    {
-                        // If it was build ok do a dependency walk
-                        // TODO: Hookup dependency walk
-                    }
-                    // Delete temp path
-                    PathHelpers.DeleteRecursively(workingDir);
-                    db.SaveChanges();
-                    return true;
+                    Log.Warn(string.Format("Could not locate request with id {0}", requestId));
+                    return false;
                 }
+                // Mark as processing
+                request.StatusId = (int)PostStatus.Processing;
+                db.SaveChanges();
+                // Create temp path
+                var workingDir = PathHelpers.GetTempFolder();
+                try
+                {
+                    var npm = new NpmInstaller();
+                    var output = npm.ProcessEntrySync(workingDir, request.GetPullRequestNpmUrl());
+                    PostStatus newStatus = output ? PostStatus.Success : PostStatus.Failed;
+                    request.StatusId = (byte)newStatus;
+                    request.Result = npm.Output;
+                }
+                catch (Exception npmException)
+                {
+
+                    Log.ErrorException(string.Format("Failed to do npm install on request with id {0}", requestId),
+                                       npmException);
+                    // Reset status to process it later
+                    request.StatusId = (int)PostStatus.JustRecieved;
+                    db.SaveChanges();
+                    return false;
+                }
+                if (request.StatusId == (int)PostStatus.Success)
+                {
+                    // If it was build ok do a dependency walk
+                    // TODO: Hookup dependency walk
+                }
+                // Delete temp path
+                PathHelpers.DeleteRecursively(workingDir);
+                db.SaveChanges();
+                return true;
             }
             catch (Exception ex)
             {
@@ -124,7 +121,7 @@ namespace Nodule_wCI.Worker
 
         public bool EndProcessRequest(IAsyncResult r)
         {
-            return ((Task<bool>) r).Result;
+            return ((Task<bool>)r).Result;
         }
 
         public IAsyncResult BeginProcessNewRequests(AsyncCallback callback, object state)
@@ -154,6 +151,6 @@ namespace Nodule_wCI.Worker
             ProcessNewRequests();
         }
         #endregion
-    
+
     }
 }

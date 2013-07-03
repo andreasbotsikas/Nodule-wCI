@@ -17,6 +17,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nodule-wCI.Worker", "Nodule
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nodule-wCI.Worker.Host", "Nodule-wCI.Worker.Host\Nodule-wCI.Worker.Host.csproj", "{1752A301-590E-4CA9-8392-6A6F9E6AFBC8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nodule-wCI.DB.Service", "Nodule-wCI.DB.Service\Nodule-wCI.DB.Service.csproj", "{95C10468-32C4-448A-9F5D-B120A9A94686}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DB", "DB", "{24EF2E05-7D1E-4266-86DD-FC866A3BD56D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worker", "Worker", "{E0AA2C02-907F-4DCE-966A-4E479D246D9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,8 +49,18 @@ Global
 		{1752A301-590E-4CA9-8392-6A6F9E6AFBC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1752A301-590E-4CA9-8392-6A6F9E6AFBC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1752A301-590E-4CA9-8392-6A6F9E6AFBC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95C10468-32C4-448A-9F5D-B120A9A94686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95C10468-32C4-448A-9F5D-B120A9A94686}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95C10468-32C4-448A-9F5D-B120A9A94686}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95C10468-32C4-448A-9F5D-B120A9A94686}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{95C10468-32C4-448A-9F5D-B120A9A94686} = {24EF2E05-7D1E-4266-86DD-FC866A3BD56D}
+		{CDC4F9AD-2CAB-46C8-8380-A25BA9429DEF} = {24EF2E05-7D1E-4266-86DD-FC866A3BD56D}
+		{15B3E0D2-6217-493A-A690-158C497F5318} = {E0AA2C02-907F-4DCE-966A-4E479D246D9F}
+		{1752A301-590E-4CA9-8392-6A6F9E6AFBC8} = {E0AA2C02-907F-4DCE-966A-4E479D246D9F}
 	EndGlobalSection
 EndGlobal

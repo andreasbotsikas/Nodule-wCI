@@ -5,13 +5,13 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="21d5704ec9824b07afd36cfe1f79196e" Name="Diagram1">
-        <EntityTypeShape EntityType="NoduleDbModel.Commits" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="NoduleDbModel.PostStatuses" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="NoduleDbModel.WebHookPostCommits" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="NoduleDbModel.WebHookPosts" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <AssociationConnector Association="NoduleDbModel.FK_Commit" ManuallyRouted="false" />
-        <AssociationConnector Association="NoduleDbModel.FK_PostStatuses" ManuallyRouted="false" />
-        <AssociationConnector Association="NoduleDbModel.FK_WebHookPosts" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="NoduleDbModel.Commits" Width="1.5" PointX="1.4315699978878582" PointY="26.784722519472577" />
+        <EntityTypeShape EntityType="NoduleDbModel.PostStatuses" Width="1.5" PointX="9.5646713644101613" PointY="15.163195244578271" />
+        <EntityTypeShape EntityType="NoduleDbModel.WebHookPostCommits" Width="1.5" PointX="5.8999738124664756" PointY="1.9852827051585926" />
+        <EntityTypeShape EntityType="NoduleDbModel.WebHookPosts" Width="1.5" PointX="4.7287501416768647" PointY="28.577473206714483" />
+        <AssociationConnector Association="NoduleDbModel.FK_Commit" />
+        <AssociationConnector Association="NoduleDbModel.FK_PostStatuses" />
+        <AssociationConnector Association="NoduleDbModel.FK_WebHookPosts" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

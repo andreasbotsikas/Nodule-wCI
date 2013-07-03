@@ -26,6 +26,7 @@ namespace Nodule_wCI.DB
         public string RepoUrl { get; set; }
         public string PullRequestReference { get; set; }
         public string Result { get; set; }
+        public string Organization { get; set; }
     
         public virtual PostStatuses PostStatuses { get; set; }
         public virtual ICollection<WebHookPostCommits> WebHookPostCommits { get; set; }
