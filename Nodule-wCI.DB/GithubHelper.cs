@@ -33,15 +33,28 @@ namespace Nodule_wCI
         /// <param name="payload">The payload as described in https://help.github.com/articles/post-receive-hooks</param>
         public static WebHookPosts ParseWebHookPost(this NoduleDbEntities db, string payload)
         {
+           
+
+            // Make sure you disable "Enable the visual studio hosting process" while debugging
+            var dynamicObject = Json.Decode(payload);
+            if (dynamicObject.pull_request != null) // This is a PR
+            {
+                return ParseWebHookPort_PullRequest(db, payload, dynamicObject);
+            }
+            else //It's a branch direct commit
+            {
+                return ParseWebHookPort_Branch(db, payload, dynamicObject);
+            }
+        }
+
+        private static WebHookPosts ParseWebHookPort_Branch(NoduleDbEntities db,string payload, dynamic dynamicObject)
+        {
             var newPost = new WebHookPosts()
             {
                 Date = DateTime.Now,
                 PostData = payload,
                 StatusId = (int)PostStatus.JustRecieved
             };
-
-            // Make sure you disable "Enable the visual studio hosting process" while debugging
-            var dynamicObject = Json.Decode(payload);
             newPost.PullRequestReference = dynamicObject.@ref;
             newPost.RepoUrl = dynamicObject.repository.url;
 
@@ -49,6 +62,7 @@ namespace Nodule_wCI
             if (RepositoryUrlParser.IsMatch(newPost.RepoUrl))
             {
                 newPost.Organization = RepositoryUrlParser.Match(newPost.RepoUrl).Groups["Organization"].Value;
+                newPost.Repository = RepositoryUrlParser.Match(newPost.RepoUrl).Groups["Repository"].Value;
             }
 
             int order = 0; //The first one is the oldest
@@ -57,6 +71,21 @@ namespace Nodule_wCI
                 string commitId = commit.id;
                 if (db.Commits.Any(i => i.Id == commitId))
                 {
+                    //Let's update the info of the commit as the PR doesn't send the right info
+                    var dbcommit = db.Commits.Where(i => i.Id == commitId).SingleOrDefault();
+                    dbcommit.Date = DateTime.Parse(commit.timestamp);
+                    dbcommit.Message = commit.message;
+                    dbcommit.Url = commit.url;
+                    dbcommit.AddedNo = commit.added != null ? commit.added.Length : 0;
+                    dbcommit.DeletedNo = commit.removed != null ? commit.removed.Length : 0;
+                    dbcommit.ModifiedNo = commit.modified != null ? commit.modified.Length : 0;
+                    if (commit.committer != null)
+                    {
+                        dbcommit.Username = commit.committer.username;
+                        dbcommit.Name = commit.committer.name;
+                        dbcommit.Email = commit.committer.email;
+                    }
+
                     // No need to add the commit in the db
                     newPost.WebHookPostCommits.Add(new WebHookPostCommits()
                     {
@@ -92,6 +121,65 @@ namespace Nodule_wCI
                 order++;
             }
 
+            return newPost;
+        }
+
+        private static WebHookPosts ParseWebHookPort_PullRequest(NoduleDbEntities db, string payload, dynamic dynamicObject)
+        {
+            var newPost = new WebHookPosts()
+            {
+                Date = DateTime.Now,
+                PostData = payload,
+                StatusId = (int)PostStatus.JustRecieved
+            };
+            newPost.PullRequestReference = string.Format("refs/pull/{0}/head", dynamicObject.number); ;
+            newPost.RepoUrl = dynamicObject.repository.html_url;
+
+            // Parse the organization in order to show them easier
+            if (RepositoryUrlParser.IsMatch(newPost.RepoUrl))
+            {
+                newPost.Organization = RepositoryUrlParser.Match(newPost.RepoUrl).Groups["Organization"].Value;
+                newPost.Repository = RepositoryUrlParser.Match(newPost.RepoUrl).Groups["Repository"].Value;
+            }
+
+            string lastCommitId = dynamicObject.pull_request.head.sha;
+         
+                if (db.Commits.Any(i => i.Id == lastCommitId))
+                {
+                    // No need to add the commit in the db
+                    newPost.WebHookPostCommits.Add(new WebHookPostCommits()
+                    {
+                        CommitId = lastCommitId,
+                        Order = 0
+                    });
+                }
+                else
+                {
+                    //Create the new commit and associate it with the post
+                    // We will update the commit when it hits the master
+                    var newCommit = new Commits
+                    {
+                        Id = lastCommitId,
+                        Date = DateTime.Parse(dynamicObject.pull_request.created_at),
+                        Message = dynamicObject.pull_request.body,
+                        Url = dynamicObject.pull_request.html_url,
+                        AddedNo = 0,
+                        DeletedNo =  0,
+                        ModifiedNo = 0
+                    };
+                    if (dynamicObject.pull_request.head.user != null)
+                    {
+                        newCommit.Username = dynamicObject.pull_request.head.user.login;
+                        newCommit.Name = dynamicObject.pull_request.head.user.login;
+                        newCommit.Email = dynamicObject.pull_request.head.user.login;
+                    }
+                    newPost.WebHookPostCommits.Add(new WebHookPostCommits()
+                    {
+                        Commits = newCommit,
+                        Order = 0
+                    });
+                }
+               
             return newPost;
         }
 

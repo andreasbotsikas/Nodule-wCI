@@ -48,6 +48,7 @@
         <Property Name="PullRequestReference" Type="Edm.String" MaxLength="500" FixedLength="false" Unicode="true" />
         <Property Name="Result" Type="Edm.String" MaxLength="Max" FixedLength="false" Unicode="true" />
         <Property Name="Organization" Type="Edm.String" MaxLength="500" FixedLength="false" Unicode="true" />
+        <Property Name="Repository" Type="Edm.String" MaxLength="500" FixedLength="false" Unicode="true" />
         <NavigationProperty Name="PostStatuses" Relationship="NoduleDbModel.FK_PostStatuses" ToRole="PostStatuses" FromRole="WebHookPosts" />
         <NavigationProperty Name="WebHookPostCommits" Relationship="NoduleDbModel.FK_WebHookPosts" ToRole="WebHookPostCommits" FromRole="WebHookPosts" />
       </EntityType>

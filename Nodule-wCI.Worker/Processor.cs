@@ -37,7 +37,8 @@ namespace Nodule_wCI.Worker
             try
             {
                 long[] newRequests;
-                var db = new NoduleDbEntities(DbServiceUri);
+                // We will be checking for null, so no need for exception
+                var db = new NoduleDbEntities(DbServiceUri){IgnoreResourceNotFoundException = true};
 
                 const int unprocessedStatus = (int)PostStatus.JustRecieved;
                 newRequests = db.WebHookPosts.Where(i => i.StatusId == unprocessedStatus).Select(i => i.Id).ToArray();
@@ -60,8 +61,9 @@ namespace Nodule_wCI.Worker
         {
             try
             {
-                var db = new NoduleDbEntities(DbServiceUri);
-                var request = db.WebHookPosts.SingleOrDefault(i => i.Id == requestId);
+                // We will be checking for null, so no need for exception
+                var db = new NoduleDbEntities(DbServiceUri) { IgnoreResourceNotFoundException = true };
+                var request = db.WebHookPosts.Where(i => i.Id == requestId).SingleOrDefault();
                 if (request == null)
                 {
                     Log.Warn(string.Format("Could not locate request with id {0}", requestId));
@@ -69,7 +71,24 @@ namespace Nodule_wCI.Worker
                 }
                 // Mark as processing
                 request.StatusId = (int)PostStatus.Processing;
+                db.UpdateObject(request);
                 db.SaveChanges();
+
+                var lastCommit = db.WebHookPostCommits.Where(i=>i.WebHookPostId==requestId).OrderBy(i => i.Order).Take(1).SingleOrDefault();
+                if (lastCommit == null)
+                {
+                    Log.Error(string.Format("Could not find last commit for request with id {0}", requestId));
+                }
+                else try
+                {
+                    var client = new Github.CommandHelper();
+                    client.AddCommitComment(request.Organization, request.Repository, lastCommit.CommitId, string.Format("Starting to test on windows. [Check status here]({0}). Will report back soon.", string.Format(ConfigurationManager.AppSettings["infoUrl"], requestId)));
+                }
+                catch (Exception githubError)
+                {
+                    Log.ErrorException(string.Format("Failed to send github message on request with id {0}", requestId),
+                                       githubError); 
+                }
                 // Create temp path
                 var workingDir = PathHelpers.GetTempFolder();
                 try
@@ -79,6 +98,16 @@ namespace Nodule_wCI.Worker
                     PostStatus newStatus = output ? PostStatus.Success : PostStatus.Failed;
                     request.StatusId = (byte)newStatus;
                     request.Result = npm.Output;
+                    try
+                    {
+                        var client = new Github.CommandHelper();
+                        client.AddCommitComment(request.Organization, request.Repository, lastCommit.CommitId, string.Format("Testing on windows {1}. [Check details here]({0}).", string.Format(ConfigurationManager.AppSettings["infoUrl"], requestId), newStatus.ToString()));
+                    }
+                    catch (Exception githubError)
+                    {
+                        Log.ErrorException(string.Format("Failed to send github message on request with id {0}", requestId), githubError);
+                    }
+
                 }
                 catch (Exception npmException)
                 {
@@ -87,7 +116,15 @@ namespace Nodule_wCI.Worker
                                        npmException);
                     // Reset status to process it later
                     request.StatusId = (int)PostStatus.JustRecieved;
-                    db.SaveChanges();
+                    try
+                    {
+                        var client = new Github.CommandHelper();
+                        client.AddCommitComment(request.Organization, request.Repository, lastCommit.CommitId, string.Format("An error occured while testing on windows. [Check status here]({0}). Please [restart the process manually clicking here]({1}).", string.Format(ConfigurationManager.AppSettings["infoUrl"], requestId), string.Format(ConfigurationManager.AppSettings["restartBuildUrl"], requestId)));
+                    }
+                    catch (Exception githubError)
+                    {
+                        Log.ErrorException(string.Format("Failed to send github message on request with id {0}", requestId), githubError);
+                    }
                     return false;
                 }
                 if (request.StatusId == (int)PostStatus.Success)
@@ -97,6 +134,7 @@ namespace Nodule_wCI.Worker
                 }
                 // Delete temp path
                 PathHelpers.DeleteRecursively(workingDir);
+                db.UpdateObject(request);
                 db.SaveChanges();
                 return true;
             }

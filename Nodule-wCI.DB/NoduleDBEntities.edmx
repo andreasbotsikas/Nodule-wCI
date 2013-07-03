@@ -66,6 +66,7 @@
           <Property Name="PullRequestReference" Type="nvarchar" MaxLength="500" />
           <Property Name="Result" Type="ntext" />
           <Property Name="Organization" Type="nvarchar" MaxLength="500" />
+          <Property Name="Repository" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <Association Name="FK_Commit">
           <End Role="Commits" Type="NoduleDbModel.Store.Commits" Multiplicity="1">
@@ -180,6 +181,7 @@
           <NavigationProperty Name="PostStatuses" Relationship="NoduleDbModel.FK_PostStatuses" FromRole="WebHookPosts" ToRole="PostStatuses" />
           <NavigationProperty Name="WebHookPostCommits" Relationship="NoduleDbModel.FK_WebHookPosts" FromRole="WebHookPosts" ToRole="WebHookPostCommits" />
           <Property Type="String" Name="Organization" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Repository" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Commit">
           <End Type="NoduleDbModel.Commits" Role="Commits" Multiplicity="1">
@@ -265,6 +267,7 @@
           <EntitySetMapping Name="WebHookPosts">
             <EntityTypeMapping TypeName="NoduleDbModel.WebHookPosts">
               <MappingFragment StoreEntitySet="WebHookPosts">
+                <ScalarProperty Name="Repository" ColumnName="Repository" />
                 <ScalarProperty Name="Organization" ColumnName="Organization" />
                 <ScalarProperty Name="Result" ColumnName="Result" />
                 <ScalarProperty Name="PullRequestReference" ColumnName="PullRequestReference" />

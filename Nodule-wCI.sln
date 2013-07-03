@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DB", "DB", "{24EF2E05-7D1E-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worker", "Worker", "{E0AA2C02-907F-4DCE-966A-4E479D246D9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nodule-wCI.Github", "Nodule-wCI.Github\Nodule-wCI.Github.csproj", "{99026FC5-1089-41D4-AD46-D0B29F7165B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{95C10468-32C4-448A-9F5D-B120A9A94686}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95C10468-32C4-448A-9F5D-B120A9A94686}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95C10468-32C4-448A-9F5D-B120A9A94686}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99026FC5-1089-41D4-AD46-D0B29F7165B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99026FC5-1089-41D4-AD46-D0B29F7165B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99026FC5-1089-41D4-AD46-D0B29F7165B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99026FC5-1089-41D4-AD46-D0B29F7165B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

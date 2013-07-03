@@ -57,9 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="GitHubPostSample.json">
+    <Content Include="GitHubPostSample.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Service References\Worker\service.wsdl" />
     <None Include="Service References\Worker\service.xsd">
       <SubType>Designer</SubType>
@@ -67,6 +67,9 @@
     <None Include="Service References\Worker\service1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="testPR.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -87,9 +90,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nodule-wCI.Worker\Nodule-wCI.Worker.csproj">
-      <Project>{15b3e0d2-6217-493a-a690-158c497f5318}</Project>
-      <Name>Nodule-wCI.Worker</Name>
+    <ProjectReference Include="..\Nodule-wCI.DB\Nodule-wCI.DB.csproj">
+      <Project>{cdc4f9ad-2cab-46c8-8380-a25ba9429def}</Project>
+      <Name>Nodule-wCI.DB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Nodule-wCI.Github\Nodule-wCI.Github.csproj">
+      <Project>{99026fc5-1089-41d4-ad46-d0b29f7165b6}</Project>
+      <Name>Nodule-wCI.Github</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

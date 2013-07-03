@@ -1,4 +1,6 @@
-﻿@model System.Data.Entity.DbSet<Nodule_wCI.DB.WebHookPosts>
+﻿@using Nodule_wCI
+@using Nodule_wCI.Enums
+@model System.Data.Entity.DbSet<Nodule_wCI.DB.WebHookPosts>
 @{
     ViewBag.Title = "List of requests";
 }
@@ -11,7 +13,7 @@
         <ul>
         @foreach (var r in Model)
         {
-            <li>@r.GetPullRequestNpmUrl() | @r.Date | @r.PostStatuses.Description @if(r.StatusId>(int)Nodule_wCI.DB.PostStatuses.AvailableStatuses.Processing){<a href="@Url.Action("BuildLog", new { prId = r.Id })"> | Build log</a>}</li>    
+            <li>@r.GetPullRequestNpmUrl() | @r.Date | @r.PostStatuses.Description @if(r.StatusId>(int)PostStatus.Processing){<a href="@Url.Action("BuildLog", new { prId = r.Id })"> | Build log</a>}else{<a href="@Url.Action("RestartBuild", new { prId = r.Id })"> | Restart build</a>}</li>    
         }  
         </ul>      
     </body>

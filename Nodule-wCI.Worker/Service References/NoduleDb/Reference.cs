@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 // Original file name:
-// Generation date: 3/7/2013 2:50:30 μμ
+// Generation date: 3/7/2013 9:08:07 μμ
 namespace Nodule_wCI.Worker.NoduleDb
 {
     
@@ -877,6 +877,28 @@ namespace Nodule_wCI.Worker.NoduleDb
         private string _Organization;
         partial void OnOrganizationChanging(string value);
         partial void OnOrganizationChanged();
+        /// <summary>
+        /// There are no comments for Property Repository in the schema.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Services.Design", "1.0.0")]
+        public string Repository
+        {
+            get
+            {
+                return this._Repository;
+            }
+            set
+            {
+                this.OnRepositoryChanging(value);
+                this._Repository = value;
+                this.OnRepositoryChanged();
+                this.OnPropertyChanged("Repository");
+            }
+        }
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Services.Design", "1.0.0")]
+        private string _Repository;
+        partial void OnRepositoryChanging(string value);
+        partial void OnRepositoryChanged();
         /// <summary>
         /// There are no comments for PostStatuses in the schema.
         /// </summary>
