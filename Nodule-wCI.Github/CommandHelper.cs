@@ -81,10 +81,10 @@ namespace Nodule_wCI.Github
             return output;
         }
 
-        public void UpdateCommitComment(string owner, string repositoryName, string commitSha,long id, string message)
+        public void UpdateCommitComment(string owner, string repositoryName,long id, string message)
         {
             var client = GetClient();
-            client.Patch(string.Format("/repos/{0}/{1}/commits/{2}/comments/{3}", owner, repositoryName, commitSha,id), new
+            client.Patch(string.Format("/repos/{0}/{1}/comments/{2}", owner, repositoryName, id), new
             {
                 body = message
             });

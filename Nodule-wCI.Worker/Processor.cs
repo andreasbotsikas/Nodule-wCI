@@ -97,7 +97,7 @@ namespace Nodule_wCI.Worker
                         }
                     }
                     if (previousCommentId>0){ // Update previous comment
-                        client.UpdateCommitComment(request.Organization, request.Repository, lastCommit.CommitId,previousCommentId, gitHubMessage.ToString());
+                        client.UpdateCommitComment(request.Organization, request.Repository, previousCommentId, gitHubMessage.ToString());
                     }else{ // Add a new one
                         client.AddCommitComment(request.Organization, request.Repository, lastCommit.CommitId, gitHubMessage.ToString());
                     }
