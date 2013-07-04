@@ -13,7 +13,7 @@
         <ul>
         @foreach (var r in Model)
         {
-            <li>@r.GetPullRequestNpmUrl() | @r.Date | @r.PostStatuses.Description @if(r.StatusId>(int)PostStatus.Processing){<a href="@Url.Action("BuildLog", new { prId = r.Id })"> | Build log</a>}else{<a href="@Url.Action("RestartBuild", new { prId = r.Id })"> | Restart build</a>}</li>    
+            <li>@r.GetPullRequestNpmUrl() | @r.Date | @r.PostStatuses.Description @if(r.StatusId>(int)PostStatus.Processing){<a href="@Url.Action("BuildLog", new { id = r.Id })"> | Build log</a>}else{<a href="@Url.Action("RestartBuild", new { id = r.Id })"> | Restart build</a>}</li>    
         }  
         </ul>      
     </body>

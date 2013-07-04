@@ -75,38 +75,7 @@ namespace Nodule_wCI.Worker
                 db.SaveChanges();
 
                 var lastCommit = db.WebHookPostCommits.Where(i=>i.WebHookPostId==requestId).OrderBy(i => i.Order).Take(1).SingleOrDefault();
-                if (lastCommit == null)
-                {
-                    Log.Error(string.Format("Could not find last commit for request with id {0}", requestId));
-                }
-                else try
-                {
-
-                    var gitHubMessage = new StringBuilder();
-                    gitHubMessage.AppendLine(ConfigurationManager.AppSettings["messageHeader"]);
-                    gitHubMessage.Append(String.Format(ConfigurationManager.AppSettings["messageBody"],requestId));
-
-                    var client = new Github.CommandHelper();
-                    var existingMessages = client.GetCommitComments(request.Organization, request.Repository, lastCommit.CommitId);
-                    long previousCommentId = -1;
-                    foreach (var msg in existingMessages)
-                    {
-                        if (msg.Messsage.StartsWith(ConfigurationManager.AppSettings["messageHeader"])){
-                            previousCommentId = msg.Id;
-                            break;
-                        }
-                    }
-                    if (previousCommentId>0){ // Update previous comment
-                        client.UpdateCommitComment(request.Organization, request.Repository, previousCommentId, gitHubMessage.ToString());
-                    }else{ // Add a new one
-                        client.AddCommitComment(request.Organization, request.Repository, lastCommit.CommitId, gitHubMessage.ToString());
-                    }
-                }
-                catch (Exception githubError)
-                {
-                    Log.ErrorException(string.Format("Failed to send github message on request with id {0}", requestId),
-                                       githubError); 
-                }
+                TryUpdateGithubMessage(requestId, request, lastCommit);
                 // Create temp path
                 var workingDir = PathHelpers.GetTempFolder();
                 try
@@ -135,6 +104,8 @@ namespace Nodule_wCI.Worker
                 PathHelpers.DeleteRecursively(workingDir);
                 db.UpdateObject(request);
                 db.SaveChanges();
+                // Update message to refresh the image
+                TryUpdateGithubMessage(requestId, request, lastCommit);
                 return true;
             }
             catch (Exception ex)
@@ -142,6 +113,47 @@ namespace Nodule_wCI.Worker
                 Log.ErrorException(string.Format("Failed to process request with id {0}", requestId), ex);
                 return false;
             }
+        }
+
+        private static void TryUpdateGithubMessage(long requestId, WebHookPosts request, WebHookPostCommits lastCommit)
+        {
+            if (lastCommit == null)
+            {
+                Log.Error(string.Format("Could not find last commit for request with id {0}.", requestId));
+            }
+            else try
+                {
+
+                    var gitHubMessage = new StringBuilder();
+                    gitHubMessage.AppendLine(ConfigurationManager.AppSettings["messageHeader"]);
+                    // Diversify imagate in order to avoid github image caching
+                    gitHubMessage.AppendLine(String.Format(ConfigurationManager.AppSettings["messageBody"], requestId, Guid.NewGuid()));
+
+                    var client = new Github.CommandHelper();
+                    var existingMessages = client.GetCommitComments(request.Organization, request.Repository, lastCommit.CommitId);
+                    Github.CommandHelper.Comment previousComment= null;
+                    foreach (var msg in existingMessages)
+                    {
+                        if (msg.Messsage.StartsWith(ConfigurationManager.AppSettings["messageHeader"]))
+                        {
+                            previousComment = msg;
+                            break;
+                        }
+                    }
+                    if (previousComment !=null)
+                    { // Update previous comment 
+                        client.UpdateCommitComment(request.Organization, request.Repository, previousComment.Id, gitHubMessage.ToString());
+                    }
+                    else
+                    { // Add a new one
+                        client.AddCommitComment(request.Organization, request.Repository, lastCommit.CommitId, gitHubMessage.ToString());
+                    }
+                }
+                catch (Exception githubError)
+                {
+                    Log.ErrorException(string.Format("Failed to send or update github message on request with id {0}.", requestId),
+                                       githubError);
+                }
         }
 
         #region Async wcf calls

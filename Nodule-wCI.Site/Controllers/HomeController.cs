@@ -27,16 +27,16 @@ namespace Nodule_wCI.Site.Controllers
             return View(db.WebHookPosts);
         }
 
-        public ActionResult BuildLog(long? prId)
+        public ActionResult BuildLog(long? id)
         {
-            if (!prId.HasValue) prId = -1;
-            return View(db.WebHookPosts.Where(i => i.Id == prId).SingleOrDefault());
+            if (!id.HasValue) id = -1;
+            return View(db.WebHookPosts.Where(i => i.Id == id).SingleOrDefault());
         }
 
         private const string PngMimeType = "image/png";
         
         [NoCache]
-        public FileResult BuildStatus(long id)
+        public FileResult BuildStatus(long id, string rnd)
         {
             var status = (int)db.WebHookPosts.Where(i => i.Id == id).Select(i => i.StatusId).SingleOrDefault();
             switch (status)
@@ -54,13 +54,13 @@ namespace Nodule_wCI.Site.Controllers
             }
         }
 
-        public ActionResult RestartBuild(long? prId)
+        public ActionResult RestartBuild(long? id)
         {
-            if (!prId.HasValue) prId = -1;
+            if (!id.HasValue) id = -1;
             // Fire the request and forget about it
             var c = new NoduleWorker.ProcessorClient();
-            c.StartProcessRequest(prId.Value);
-            return View(db.WebHookPosts.Where(i => i.Id == prId.Value).SingleOrDefault());
+            c.StartProcessRequest(id.Value);
+            return View(db.WebHookPosts.Where(i => i.Id == id.Value).SingleOrDefault());
         }
     }
 }
