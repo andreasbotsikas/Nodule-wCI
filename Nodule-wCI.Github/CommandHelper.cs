@@ -52,6 +52,44 @@ namespace Nodule_wCI.Github
             });
         }
 
+        /// <summary>
+        /// TODO: add more fields
+        /// </summary>
+        public class Comment
+        {
+            public long Id { get; set; }
+            public string Messsage { get; set; }
+            public string Username { get; set; }
+            public string Created { get; set; }
+        }
+
+        public List<Comment> GetCommitComments(string owner, string repositoryName, string commitSha)
+        {
+            var output = new List<Comment>();
+            var client = GetClient();
+            var comments = client.Get(string.Format("/repos/{0}/{1}/commits/{2}/comments", owner, repositoryName, commitSha));
+            foreach (dynamic comment in comments)
+            {
+                output.Add(new Comment()
+                {
+                    Id = comment.id,
+                    Messsage = comment.body,
+                    Username = comment.user.login,
+                    Created = comment.created_at
+                });
+            }
+            return output;
+        }
+
+        public void UpdateCommitComment(string owner, string repositoryName, string commitSha,long id, string message)
+        {
+            var client = GetClient();
+            client.Patch(string.Format("/repos/{0}/{1}/commits/{2}/comments/{3}", owner, repositoryName, commitSha,id), new
+            {
+                body = message
+            });
+        }
+
         public void AddCommitComment(string owner, string repositoryName, string commitSha, string message)
         {
             var client = GetClient();

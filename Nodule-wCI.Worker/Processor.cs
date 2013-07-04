@@ -81,8 +81,26 @@ namespace Nodule_wCI.Worker
                 }
                 else try
                 {
+
+                    var gitHubMessage = new StringBuilder();
+                    gitHubMessage.AppendLine(ConfigurationManager.AppSettings["messageHeader"]);
+                    gitHubMessage.Append(String.Format(ConfigurationManager.AppSettings["messageBody"],requestId));
+
                     var client = new Github.CommandHelper();
-                    client.AddCommitComment(request.Organization, request.Repository, lastCommit.CommitId, string.Format("Starting to test on windows. [Check status here]({0}). Will report back soon.", string.Format(ConfigurationManager.AppSettings["infoUrl"], requestId)));
+                    var existingMessages = client.GetCommitComments(request.Organization, request.Repository, lastCommit.CommitId);
+                    long previousCommentId = -1;
+                    foreach (var msg in existingMessages)
+                    {
+                        if (msg.Messsage.StartsWith(ConfigurationManager.AppSettings["messageHeader"])){
+                            previousCommentId = msg.Id;
+                            break;
+                        }
+                    }
+                    if (previousCommentId>0){ // Update previous comment
+                        client.UpdateCommitComment(request.Organization, request.Repository, lastCommit.CommitId,previousCommentId, gitHubMessage.ToString());
+                    }else{ // Add a new one
+                        client.AddCommitComment(request.Organization, request.Repository, lastCommit.CommitId, gitHubMessage.ToString());
+                    }
                 }
                 catch (Exception githubError)
                 {
@@ -98,16 +116,6 @@ namespace Nodule_wCI.Worker
                     PostStatus newStatus = output ? PostStatus.Success : PostStatus.Failed;
                     request.StatusId = (byte)newStatus;
                     request.Result = npm.Output;
-                    try
-                    {
-                        var client = new Github.CommandHelper();
-                        client.AddCommitComment(request.Organization, request.Repository, lastCommit.CommitId, string.Format("Testing on windows {1}. [Check details here]({0}).", string.Format(ConfigurationManager.AppSettings["infoUrl"], requestId), newStatus.ToString()));
-                    }
-                    catch (Exception githubError)
-                    {
-                        Log.ErrorException(string.Format("Failed to send github message on request with id {0}", requestId), githubError);
-                    }
-
                 }
                 catch (Exception npmException)
                 {
@@ -116,15 +124,6 @@ namespace Nodule_wCI.Worker
                                        npmException);
                     // Reset status to process it later
                     request.StatusId = (int)PostStatus.JustRecieved;
-                    try
-                    {
-                        var client = new Github.CommandHelper();
-                        client.AddCommitComment(request.Organization, request.Repository, lastCommit.CommitId, string.Format("An error occured while testing on windows. [Check status here]({0}). Please [restart the process manually clicking here]({1}).", string.Format(ConfigurationManager.AppSettings["infoUrl"], requestId), string.Format(ConfigurationManager.AppSettings["restartBuildUrl"], requestId)));
-                    }
-                    catch (Exception githubError)
-                    {
-                        Log.ErrorException(string.Format("Failed to send github message on request with id {0}", requestId), githubError);
-                    }
                     return false;
                 }
                 if (request.StatusId == (int)PostStatus.Success)

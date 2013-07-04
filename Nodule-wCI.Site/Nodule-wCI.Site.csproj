@@ -119,6 +119,7 @@
     <Compile Include="Code\AllowCrossSiteJsonAttribute.cs" />
     <Compile Include="Code\Contrib\FilterIPAttribute.cs" />
     <Compile Include="Code\Contrib\IPList.cs" />
+    <Compile Include="Code\NoCacheAttribute.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WebHookController.cs" />
     <Compile Include="Global.asax.cs">
@@ -135,6 +136,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="Content\StatusImages\Error.png" />
+    <Content Include="Content\StatusImages\Idle.png" />
+    <Content Include="Content\StatusImages\Processing.png" />
+    <Content Include="Content\StatusImages\Success.png" />
+    <Content Include="Content\StatusImages\Warning.png" />
     <Content Include="Global.asax" />
     <None Include="Service References\NoduleWorker\configuration91.svcinfo" />
     <None Include="Service References\NoduleWorker\configuration.svcinfo" />
