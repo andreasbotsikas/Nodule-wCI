@@ -4,12 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="NoduleDbModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="NoduleDbModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="NoduleDbModelStoreContainer">
-          <EntitySet Name="Commits" EntityType="NoduleDbModel.Store.Commits" store:Type="Tables" />
-          <EntitySet Name="PostStatuses" EntityType="NoduleDbModel.Store.PostStatuses" store:Type="Tables" />
-          <EntitySet Name="WebHookPostCommits" EntityType="NoduleDbModel.Store.WebHookPostCommits" store:Type="Tables" />
-          <EntitySet Name="WebHookPosts" EntityType="NoduleDbModel.Store.WebHookPosts" store:Type="Tables" />
+          <EntitySet Name="Commits" EntityType="NoduleDbModel.Store.Commits" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="PostStatuses" EntityType="NoduleDbModel.Store.PostStatuses" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="WebHookPostCommits" EntityType="NoduleDbModel.Store.WebHookPostCommits" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="WebHookPosts" EntityType="NoduleDbModel.Store.WebHookPosts" store:Type="Tables" Schema="dbo" />
           <AssociationSet Name="FK_Commit" Association="NoduleDbModel.Store.FK_Commit">
             <End Role="Commits" EntitySet="Commits" />
             <End Role="WebHookPostCommits" EntitySet="WebHookPostCommits" />
@@ -178,10 +178,10 @@
           <Property Type="String" Name="RepoUrl" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="PullRequestReference" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Result" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="PostStatuses" Relationship="NoduleDbModel.FK_PostStatuses" FromRole="WebHookPosts" ToRole="PostStatuses" />
-          <NavigationProperty Name="WebHookPostCommits" Relationship="NoduleDbModel.FK_WebHookPosts" FromRole="WebHookPosts" ToRole="WebHookPostCommits" />
           <Property Type="String" Name="Organization" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Repository" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PostStatuses" Relationship="NoduleDbModel.FK_PostStatuses" FromRole="WebHookPosts" ToRole="PostStatuses" />
+          <NavigationProperty Name="WebHookPostCommits" Relationship="NoduleDbModel.FK_WebHookPosts" FromRole="WebHookPosts" ToRole="WebHookPostCommits" />
         </EntityType>
         <Association Name="FK_Commit">
           <End Type="NoduleDbModel.Commits" Role="Commits" Multiplicity="1">
