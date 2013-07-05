@@ -112,6 +112,12 @@ namespace Nodule_wCI
                         newCommit.Name = commit.committer.name;
                         newCommit.Email = commit.committer.email;
                     }
+                    // No need to add to db as it will be added via webhookpostcommit
+//#if DB_VIA_PROXY
+//                    db.AddObject("Commits", newCommit);
+//#else
+//                    db.Commits.Add(newCommit);
+//#endif
                     newPost.WebHookPostCommits.Add(new WebHookPostCommits()
                     {
                         Commits = newCommit,
@@ -173,6 +179,12 @@ namespace Nodule_wCI
                         newCommit.Name = dynamicObject.pull_request.head.user.login;
                         newCommit.Email = dynamicObject.pull_request.head.user.login;
                     }
+                    // No need to add to db as it will be added via webhookpostcommit
+//#if DB_VIA_PROXY
+//                    db.AddObject("Commits", newCommit);
+//#else
+//                    db.Commits.Add(newCommit);
+//#endif
                     newPost.WebHookPostCommits.Add(new WebHookPostCommits()
                     {
                         Commits = newCommit,
