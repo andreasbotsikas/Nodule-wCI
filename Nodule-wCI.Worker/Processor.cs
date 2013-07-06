@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Services.Client;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Text;
@@ -24,7 +27,14 @@ namespace Nodule_wCI.Worker
         {
             // Create a uri to keep the db service address
             DbServiceUri = new Uri(ConfigurationManager.AppSettings["DbServiceUri"]);
+            CertificateForDbService = AllowOnlySpecificCertificateAuthenticator.GetCertificateBySubjectName(ConfigurationManager.AppSettings["DbServiceClientCertificate"]);
+            if (CertificateForDbService==null)
+                throw new ApplicationException(string.Format("Could not locate certificate {0} in LocalMachine-->My", ConfigurationManager.AppSettings["DbServiceClientCertificate"]));
         }
+
+        // For mutual authentication we attach the client certificate
+        // Check http://blogs.msdn.com/b/mcsuksoldev/archive/2011/12/14/mutual-authentication-with-a-iis-hosted-wcf-data-service-installed-in-a-workgroup-environment.aspx
+        private static X509Certificate CertificateForDbService { get; set; }
 
         private static Uri DbServiceUri { get; set; }
 
@@ -38,8 +48,7 @@ namespace Nodule_wCI.Worker
             {
                 long[] newRequests;
                 // We will be checking for null, so no need for exception
-                var db = new NoduleDbEntities(DbServiceUri){IgnoreResourceNotFoundException = true};
-
+                var db = new NoduleDbEntities(DbServiceUri, CertificateForDbService){IgnoreResourceNotFoundException = true };
                 const int unprocessedStatus = (int)PostStatus.JustRecieved;
                 newRequests = db.WebHookPosts.Where(i => i.StatusId == unprocessedStatus).Select(i => i.Id).ToArray();
                 // Process all the new requests
@@ -62,7 +71,7 @@ namespace Nodule_wCI.Worker
             try
             {
                 // We will be checking for null, so no need for exception
-                var db = new NoduleDbEntities(DbServiceUri) { IgnoreResourceNotFoundException = true };
+                var db = new NoduleDbEntities(DbServiceUri, CertificateForDbService) { IgnoreResourceNotFoundException = true };
                 var request = db.WebHookPosts.Where(i => i.Id == requestId).SingleOrDefault();
                 if (request == null)
                 {

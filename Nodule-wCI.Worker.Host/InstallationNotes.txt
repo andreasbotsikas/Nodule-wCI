@@ -1,0 +1,4 @@
+﻿http://www.iis.net/configreference/system.webserver/security/authentication/iisclientcertificatemappingauthentication
+
+http://www.iis.net/configreference/system.webserver/security/authentication/clientcertificatemappingauthentication
+
