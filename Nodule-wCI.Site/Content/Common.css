@@ -1,0 +1,25 @@
+﻿.subtle {
+  color: gray;
+}
+.k-state-selected .subtle {
+  color: #d3e5ed;
+}
+.k-state-selected a:link,
+.k-state-selected a:visited,
+.k-state-selected a:active {
+  color: #fff;
+}
+.k-state-selected .row-menu .k-animation-container a:link,
+.k-state-selected .row-menu .k-animation-container a:visited,
+.k-state-selected .row-menu .k-animation-container a:active {
+  color: #000;
+}
+.row-menu li.k-item {
+  width: 100%;
+}
+.row-menu .k-animation-container ul.k-popup {
+  z-index: 99999;
+}
+td.menu-cell {
+  overflow: visible;
+}

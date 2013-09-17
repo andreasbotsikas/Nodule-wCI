@@ -23,8 +23,7 @@ namespace Nodule_wCI.Site.Controllers
         // GET: /Home/
         public ActionResult Index()
         {
-            // Show something
-            return View(db.WebHookPosts);
+            return View();
         }
 
         public ActionResult BuildLog(long? id)
@@ -34,9 +33,9 @@ namespace Nodule_wCI.Site.Controllers
         }
 
         private const string PngMimeType = "image/png";
-        
+
         [NoCache]
-        public FileResult BuildStatus(long id, string rnd)
+        public FileResult BuildStatus(long id, string rnd = "")
         {
             var status = (int)db.WebHookPosts.Where(i => i.Id == id).Select(i => i.StatusId).SingleOrDefault();
             switch (status)

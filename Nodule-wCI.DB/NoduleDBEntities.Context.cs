@@ -29,5 +29,6 @@ namespace Nodule_wCI.DB
         public DbSet<PostStatuses> PostStatuses { get; set; }
         public DbSet<WebHookPostCommits> WebHookPostCommits { get; set; }
         public DbSet<WebHookPosts> WebHookPosts { get; set; }
+        public DbSet<ListOfRequests> ListOfRequests { get; set; }
     }
 }

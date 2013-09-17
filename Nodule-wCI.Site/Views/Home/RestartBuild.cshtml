@@ -2,21 +2,13 @@
 @{
     Layout = null;
 }
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Restart build</title>
-    </head>
-    <body>
-        <div>
-            @if (Model == null)
-            {
-                <b>Request not found!</b>
-            }
-            else
-            {
-                <b>Restart started please check <a href="@Url.Action("BuildLog", new { id = Model.Id })">build log</a></b>
-            }
-        </div>
-    </body>
-</html>
+<div>
+    @if (Model == null)
+    {
+        <b>Request not found!</b>
+    }
+    else
+    {
+        <b>Restart started please check <a href="@Url.Action("BuildLog", new { id = Model.Id })">build log</a></b>
+    }
+</div>

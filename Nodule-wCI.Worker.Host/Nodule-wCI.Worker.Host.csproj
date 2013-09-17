@@ -102,6 +102,7 @@
   <ItemGroup>
     <None Include="..\Nodule-wCI.Worker\App.config">
       <Link>App.config</Link>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Nodule-wCI.Worker.Host_TemporaryKey.pfx" />
   </ItemGroup>

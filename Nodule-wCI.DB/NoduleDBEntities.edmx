@@ -10,6 +10,16 @@
           <EntitySet Name="PostStatuses" EntityType="NoduleDbModel.Store.PostStatuses" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="WebHookPostCommits" EntityType="NoduleDbModel.Store.WebHookPostCommits" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="WebHookPosts" EntityType="NoduleDbModel.Store.WebHookPosts" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ListOfRequests" EntityType="NoduleDbModel.Store.ListOfRequests" store:Type="Views" store:Schema="dbo" store:Name="ListOfRequests">
+            <DefiningQuery>SELECT 
+      [ListOfRequests].[Id] AS [Id], 
+      [ListOfRequests].[Date] AS [Date], 
+      [ListOfRequests].[StatusId] AS [StatusId], 
+      [ListOfRequests].[StatusDescription] AS [StatusDescription], 
+      [ListOfRequests].[RepoUrl] AS [RepoUrl], 
+      [ListOfRequests].[PullRequestReference] AS [PullRequestReference]
+      FROM [dbo].[ListOfRequests] AS [ListOfRequests]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Commit" Association="NoduleDbModel.Store.FK_Commit">
             <End Role="Commits" EntitySet="Commits" />
             <End Role="WebHookPostCommits" EntitySet="WebHookPostCommits" />
@@ -67,6 +77,23 @@
           <Property Name="Result" Type="ntext" />
           <Property Name="Organization" Type="nvarchar" MaxLength="500" />
           <Property Name="Repository" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'NoduleDb.dbo.ListOfRequests' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="ListOfRequests">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="StatusId" />
+            <PropertyRef Name="StatusDescription" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="StatusId" Type="tinyint" Nullable="false" />
+          <Property Name="StatusDescription" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="RepoUrl" Type="nvarchar" MaxLength="500" />
+          <Property Name="PullRequestReference" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <Association Name="FK_Commit">
           <End Role="Commits" Type="NoduleDbModel.Store.Commits" Multiplicity="1">
@@ -131,6 +158,7 @@
             <End Role="WebHookPosts" EntitySet="WebHookPosts" />
             <End Role="WebHookPostCommits" EntitySet="WebHookPostCommits" />
           </AssociationSet>
+          <EntitySet Name="ListOfRequests" EntityType="NoduleDbModel.ListOfRequests" />
         </EntityContainer>
         <EntityType Name="Commits">
           <Key>
@@ -225,6 +253,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ListOfRequests">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="StatusId" />
+            <PropertyRef Name="StatusDescription" />
+          </Key>
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="3" />
+          <Property Type="Byte" Name="StatusId" Nullable="false" />
+          <Property Type="String" Name="StatusDescription" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RepoUrl" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PullRequestReference" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -274,6 +316,18 @@
                 <ScalarProperty Name="RepoUrl" ColumnName="RepoUrl" />
                 <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="PostData" ColumnName="PostData" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ListOfRequests">
+            <EntityTypeMapping TypeName="NoduleDbModel.ListOfRequests">
+              <MappingFragment StoreEntitySet="ListOfRequests">
+                <ScalarProperty Name="PullRequestReference" ColumnName="PullRequestReference" />
+                <ScalarProperty Name="RepoUrl" ColumnName="RepoUrl" />
+                <ScalarProperty Name="StatusDescription" ColumnName="StatusDescription" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

@@ -4,18 +4,11 @@
 @{
     ViewBag.Title = "List of requests";
 }
-<html>
-    <head>
-        <title>@ViewBag.Title</title>
-    </head>
-    <body>
-        <h2>List of requests</h2>
-        <ul>
-        @foreach (var r in Model)
-        {
-            <li>@r.GetPullRequestNpmUrl() | @r.Date | @r.PostStatuses.Description @if(r.StatusId>(int)PostStatus.Processing){<a href="@Url.Action("BuildLog", new { id = r.Id })"> | Build log</a>}else{<a href="@Url.Action("RestartBuild", new { id = r.Id })"> | Restart build</a>}</li>    
-        }  
-        </ul>      
-    </body>
-</html>
+<h2>List of requests</h2>
+<div id="RequestsGrid"></div>
+<script type="text/javascript">
+    $(function () {
+        Nodule.RequestGrid("RequestsGrid", '@Url.Content("~/Home/BuildStatus/")', '@Url.Content("~/Home/BuildLog/")', '@Url.Content("~/Home/RestartBuild/")', "@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "ListOfRequests" })");
+            });
+</script>
 

@@ -60,6 +60,9 @@
     </Compile>
     <Compile Include="Enums.cs" />
     <Compile Include="GithubHelper.cs" />
+    <Compile Include="ListOfRequests.cs">
+      <DependentUpon>NoduleDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="NoduleDBEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,9 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DBCreationScript.sql" />
-    <Content Include="NoduleDb.sdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
