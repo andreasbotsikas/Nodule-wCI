@@ -44,19 +44,7 @@ Nodule.RequestGrid = function (divId, statusUrl, buildLogUrl, restartUrl, odataR
             $(".row-menu").kendoMenu();
             $('.row-menu').closest("td").addClass("menu-cell");
         },
-        //toolbar: eKatataksis.ClassificationRequests.getMenu(divId, isAdmin),
-        change: function() { // Selected change (show menu)
-            var row = this.select();
-            if (row && row.length == 1) {
-                // Since we have a menu per row, use that code
-                $('#' + divId + 'Actions').html($(row[0]).find("[role='menu']").find("[role='menuitem']").html());
-                //var dataItem = this.dataItem(row[0]);
-                //$('#' + divId + 'Actions').html(eKatataksis.ClassificationRequests.getActionForItem(dataItem));
-            } else {
-                //$('#' + divId + 'Actions').html(eKatataksis.ClassificationRequests.promptForActionsMenu);
-            }
-        },
-        selectable: "row",
+        selectable: false,
         dataSource: {
             type: "odata",
             serverPaging: true,
@@ -80,10 +68,6 @@ Nodule.RequestGrid = function (divId, statusUrl, buildLogUrl, restartUrl, odataR
                         Date: { type: "date" }
                     }
                 }
-            },
-            change: function() {
-                // Clear actions menu
-                //$('#' + divId + 'Actions').html(eKatataksis.ClassificationRequests.promptForActionsMenu);
             }
         },
     });
