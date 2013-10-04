@@ -85,12 +85,11 @@
           <Key>
             <PropertyRef Name="Id" />
             <PropertyRef Name="Date" />
-            <PropertyRef Name="StatusId" />
             <PropertyRef Name="StatusDescription" />
           </Key>
           <Property Name="Id" Type="bigint" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
-          <Property Name="StatusId" Type="tinyint" Nullable="false" />
+          <Property Name="StatusId" Type="int" />
           <Property Name="StatusDescription" Type="nvarchar" Nullable="false" MaxLength="100" />
           <Property Name="RepoUrl" Type="nvarchar" MaxLength="500" />
           <Property Name="PullRequestReference" Type="nvarchar" MaxLength="500" />
@@ -257,12 +256,11 @@
           <Key>
             <PropertyRef Name="Id" />
             <PropertyRef Name="Date" />
-            <PropertyRef Name="StatusId" />
             <PropertyRef Name="StatusDescription" />
           </Key>
           <Property Type="Int64" Name="Id" Nullable="false" />
           <Property Type="DateTime" Name="Date" Nullable="false" Precision="3" />
-          <Property Type="Byte" Name="StatusId" Nullable="false" />
+          <Property Type="Int32" Name="StatusId" />
           <Property Type="String" Name="StatusDescription" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="RepoUrl" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="PullRequestReference" MaxLength="500" FixedLength="false" Unicode="true" />

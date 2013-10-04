@@ -16,7 +16,7 @@ namespace Nodule_wCI.DB
     {
         public long Id { get; set; }
         public System.DateTime Date { get; set; }
-        public byte StatusId { get; set; }
+        public Nullable<int> StatusId { get; set; }
         public string StatusDescription { get; set; }
         public string RepoUrl { get; set; }
         public string PullRequestReference { get; set; }

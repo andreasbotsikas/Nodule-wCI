@@ -290,7 +290,7 @@
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
-    <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Scripts\jquery.min.map" />
     <None Include="Service References\NoduleWorker\configuration91.svcinfo" />
     <None Include="Service References\NoduleWorker\configuration.svcinfo" />
     <None Include="Service References\NoduleWorker\Reference.svcmap">

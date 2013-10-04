@@ -12,7 +12,7 @@
         <AssociationConnector Association="NoduleDbModel.FK_Commit" />
         <AssociationConnector Association="NoduleDbModel.FK_PostStatuses" />
         <AssociationConnector Association="NoduleDbModel.FK_WebHookPosts" />
-        <EntityTypeShape EntityType="NoduleDbModel.ListOfRequests" Width="1.5" PointX="0.25792281155377761" PointY="28.509354351325591" />
+        <EntityTypeShape EntityType="NoduleDbModel.ListOfRequests" Width="1.5" PointX="3.9050557612930685" PointY="26.120712024215941" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

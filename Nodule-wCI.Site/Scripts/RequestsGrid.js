@@ -26,6 +26,21 @@ Nodule.RequestGrid = function (divId, statusUrl, buildLogUrl, restartUrl, odataR
                 title: "Status",
                 template: function(dataItem) {
                     return '<img src="' + statusUrl + dataItem.Id + '"/>';
+                },
+                filterable: {
+                    ui: function (element) {
+                        element.kendoDropDownList({
+                            dataSource: [ 
+                                { Id: 1, Desc: "Just Recieved" },
+                                { Id: 2, Desc: "Processing" },
+                                { Id: 3, Desc: "Success" },
+                                { Id: 4, Desc: "Failed" },
+                            ],
+                            optionLabel: "--Select Status--",
+                            dataTextField: "Desc",
+                            dataValueField: "Id"
+                        });
+                    }
                 }
             },
             {
@@ -65,7 +80,8 @@ Nodule.RequestGrid = function (divId, statusUrl, buildLogUrl, restartUrl, odataR
                 total: "Count",
                 model: {
                     fields: {
-                        Date: { type: "date" }
+                        Date: { type: "date" },
+                        StatusId: { type: "number" }
                     }
                 }
             }
