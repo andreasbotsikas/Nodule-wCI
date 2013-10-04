@@ -11,6 +11,10 @@
 else
 {
     <b>@Model.GetPullRequestNpmUrl() | @Model.PostStatuses.Description</b>
+    if (Model.PostStatuses.Id == (byte)Nodule_wCI.Enums.PostStatus.Processing)
+    {
+        <br /><p>Previous attempt build log:</p>
+    }
     <pre>@Model.Result</pre>
 }
 
