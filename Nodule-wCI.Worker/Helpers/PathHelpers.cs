@@ -31,8 +31,17 @@ namespace Nodule_wCI.Worker.Helpers
             string[] dirs = Directory.GetDirectories(extractPath);
             foreach (string file in files)
             {
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
+                try
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                }
+                catch (PathTooLongException ex)
+                {
+                    // Workaround for huge path names
+                    // http://blogs.msdn.com/b/bclteam/archive/2007/03/26/long-paths-in-net-part-2-of-3-long-path-workarounds-kim-hamilton.aspx
+                    Win32.DeleteFile(@"\\?\" + file);
+                }
             }
 
             foreach (string dir in dirs)

@@ -85,6 +85,7 @@
     <Compile Include="Helpers\DependencyWalker.cs" />
     <Compile Include="Helpers\NpmInstaller.cs" />
     <Compile Include="Helpers\PathHelpers.cs" />
+    <Compile Include="Helpers\Win32.cs" />
     <Compile Include="IProcessor.cs" />
     <Compile Include="NoduleDbEntities.cs" />
     <Compile Include="Processor.cs" />

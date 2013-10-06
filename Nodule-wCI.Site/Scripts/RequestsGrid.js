@@ -1,6 +1,6 @@
 ﻿Nodule = window.Nodule || {};
 Nodule.RequestGrid = function (divId, statusUrl, buildLogUrl, restartUrl, odataRequestUrl) {
-    $("#" + divId ).kendoGrid({
+    $("#" + divId).kendoGrid({
         pageable: {
             pageSizes: [15, 50, 100, 150]
         },
@@ -12,7 +12,7 @@ Nodule.RequestGrid = function (divId, statusUrl, buildLogUrl, restartUrl, odataR
             {
                 field: "RepoUrl",
                 title: "Repository",
-                template: function(dataItem) {
+                template: function (dataItem) {
                     return '<a href="' + dataItem.RepoUrl + '" target="_blank">' + dataItem.RepoUrl + "</a><span class='subtle'> (" + dataItem.PullRequestReference + ')</span>';
                 }
             },
@@ -24,13 +24,13 @@ Nodule.RequestGrid = function (divId, statusUrl, buildLogUrl, restartUrl, odataR
             {
                 field: "StatusId",
                 title: "Status",
-                template: function(dataItem) {
+                template: function (dataItem) {
                     return '<img src="' + statusUrl + dataItem.Id + '"/>';
                 },
                 filterable: {
                     ui: function (element) {
                         element.kendoDropDownList({
-                            dataSource: [ 
+                            dataSource: [
                                 { Id: 1, Desc: "Just Recieved" },
                                 { Id: 2, Desc: "Processing" },
                                 { Id: 3, Desc: "Success" },
@@ -46,7 +46,7 @@ Nodule.RequestGrid = function (divId, statusUrl, buildLogUrl, restartUrl, odataR
             {
                 title: "",
                 width: "110px",
-                template: function(dataItem) {
+                template: function (dataItem) {
                     return "<ul class='row-menu'><li>Actions<ul>" +
                         "<li><a href='" + buildLogUrl + dataItem.Id + "'>Build log</a></li>" +
                         "<li><a href='" + restartUrl + dataItem.Id + "'>Restart build</a></li>" +
@@ -54,7 +54,7 @@ Nodule.RequestGrid = function (divId, statusUrl, buildLogUrl, restartUrl, odataR
                 }
             }
         ],
-        dataBound: function() {
+        dataBound: function () {
             // Make menu items
             $(".row-menu").kendoMenu();
             $('.row-menu').closest("td").addClass("menu-cell");
@@ -85,7 +85,7 @@ Nodule.RequestGrid = function (divId, statusUrl, buildLogUrl, restartUrl, odataR
                     }
                 }
             }
-        },
+        }
     });
 
 };
